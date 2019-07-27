@@ -1,0 +1,48 @@
+{
+  "name": "pmm",
+  "version": "0.0.1",
+  "description": "PostMortem Management Tool",
+  "main": "index.js",
+  "engines": {
+    "node": ">=8.0.0 <11.0.0"
+  },
+  "scripts": {
+    "clean": "rm -rf dist && rm -rf .next",
+    "test": "jest",
+    "dev": "npx next",
+    "build": "npm run clean && npx next build",
+    "start": "npx next start",
+    "now:login": "npx now login",
+    "now": "npm run build && npx now"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kgbrain/pmm.git"
+  },
+  "keywords": [
+    "post",
+    "mortem",
+    "management",
+    "24/7"
+  ],
+  "author": "KGBrain",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kgbrain/pmm/issues"
+  },
+  "homepage": "https://github.com/kgbrain/pmm#readme",
+  "dependencies": {
+    "next": "^9.0.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "@material-ui/core": "^4.2.1",
+    "@material-ui/styles": "^4.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^12.6.8",
+    "@types/react": "^16.8.23",
+    "@types/react-dom": "^16.8.5",
+    "now": "^15.8.7",
+    "typescript": "^3.5.3"
+  }
+}
