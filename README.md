@@ -1,4 +1,4 @@
-# *p*mm
+# [*p*]mm
 
 Post Mortem Management Application
 
@@ -13,9 +13,19 @@ Post Mortem Management Application
 - `npm i`
 - `npm run dev`
 
+## Run Firebase locally for testing
+
+```bash
+npm run serve
+```
+
 ## Deploy
 
-We use service [now](https://zeit.co/now) to quickly deploy the application in serverless environment:
+We use Firebase Cloud Functions with Firebase Hosting rewrite rules to host the Next.js app.
+Each individual page bundle is served in a new call to the Cloud Function which performs the initial server render.
 
-- `npm run now:login`
-- `npm run now`
+In order to deploy run the following:
+
+```bash
+npm run deploy
+```

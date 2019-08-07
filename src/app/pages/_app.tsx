@@ -1,20 +1,20 @@
-import React from "react";
-import App, { Container } from "next/app";
-import Head from "next/head";
-import { ThemeProvider } from "@material-ui/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import theme from "../ui-components/theme";
+import React from 'react';
+import Head from 'next/head';
+import App, { Container } from 'next/app';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { ThemeProvider } from '@material-ui/styles';
+import theme from '../ui-components/theme';
 
 class PmmApp extends App {
-  componentDidMount() {
+  public componentDidMount() {
     // Remove the server-side injected CSS.
-    const jssStyles = document.querySelector("#jss-server-side");
+    const jssStyles = document.querySelector('#jss-server-side');
     if (jssStyles) {
       jssStyles.parentNode.removeChild(jssStyles);
     }
   }
 
-  render() {
+  public render() {
     const { Component, pageProps } = this.props;
 
     return (

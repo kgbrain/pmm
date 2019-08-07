@@ -1,18 +1,18 @@
-import React from "react";
-import NextLink, { LinkProps } from "next/link";
-import Button, { ButtonProps } from "@material-ui/core/Button";
+import React from 'react';
+import Button, { ButtonProps } from '@material-ui/core/Button';
+import NextLink, { LinkProps } from 'next/link';
 
-interface PmmButtonProps {
+interface IPmmButtonProps {
   children: string | Element;
   buttonOpts?: ButtonProps;
   linkOpts?: LinkProps;
 }
 
-const getChild = children => {
+const getChild = (children) => {
   switch (typeof children) {
-    case "string":
+    case 'string':
       return <span>{children}</span>;
-    case "object":
+    case 'object':
       return children;
     default:
       return children;
@@ -22,8 +22,8 @@ const getChild = children => {
 export default function PmmButton({
   children,
   buttonOpts,
-  linkOpts
-}: PmmButtonProps) {
+  linkOpts,
+}: IPmmButtonProps) {
   return (
     <Button {...buttonOpts}>
       <NextLink {...linkOpts}>{getChild(children)}</NextLink>
