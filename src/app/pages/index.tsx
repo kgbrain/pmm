@@ -73,7 +73,7 @@ export default class Index extends Component<IFirebaseProps, IFirebaseState> {
     const { user, value, messages } = this.state;
 
     return (
-      <Container maxWidth='sm'>
+      <>
         {user ? (
           <Button
             variant='contained'
@@ -93,12 +93,6 @@ export default class Index extends Component<IFirebaseProps, IFirebaseState> {
           )}
         {user && (
           <div>
-            <Box my={4}>
-              <Typography variant='h4' component='h1' gutterBottom={true}>
-                [<i style={{ fontFamily: 'Georgia, sans-serif' }}>p</i>]MM
-              </Typography>
-              <Home />
-            </Box>
             <form onSubmit={this.handleSubmit}>
               <input
                 type={'text'}
@@ -115,7 +109,7 @@ export default class Index extends Component<IFirebaseProps, IFirebaseState> {
             </ul>
           </div>
         )}
-      </Container>
+      </>
     );
   }
 
