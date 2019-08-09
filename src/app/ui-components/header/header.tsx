@@ -17,7 +17,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { styles } from './header.css';
 
 interface IHeaderProps {
-  title: string,
+  title: string;
   classes: any;
   onDrawerToggle: () => void;
 }
