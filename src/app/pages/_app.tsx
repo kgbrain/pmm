@@ -1,37 +1,15 @@
 import React from 'react';
+import { withRouter } from 'next/router';
 import Head from 'next/head';
 import App, { Container } from 'next/app';
-import { ThemeProvider, withStyles, createStyles } from '@material-ui/styles';
+import { ThemeProvider, withStyles } from '@material-ui/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Hidden from '@material-ui/core/Hidden';
+import firebase from '../firebase';
 import Navigator from '../ui-components/navigator/navigator';
 import Header from '../ui-components/header/header';
-import theme from '../ui-components/theme';
-
-const drawerWidth = 256;
-
-const styles = createStyles({
-  root: {
-    display: 'flex',
-    minHeight: '100vh',
-  },
-  drawer: {
-    [theme.breakpoints.up('sm')]: {
-      width: drawerWidth,
-      flexShrink: 0,
-    },
-  },
-  appContent: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  mainContent: {
-    flex: 1,
-    padding: '48px 36px 0',
-    background: '#eaeff1',
-  },
-});
+import theme, { appStyles, drawerWidth } from '../ui-components/theme';
+import { AuthContext } from '../context';
 
 interface IPmmAppProps {
   classes: any;
@@ -41,9 +19,11 @@ interface IPmmAppState {
   mobileOpen: boolean;
 }
 
-class PmmApp extends App<IPmmAppProps, IPmmAppState>  {
+class PmmApp extends App<IPmmAppProps, IPmmAppState> {
   public state = {
     mobileOpen: false,
+    user: null,
+    unsubscribe: null
   };
 
   public componentDidMount() {
@@ -52,10 +32,24 @@ class PmmApp extends App<IPmmAppProps, IPmmAppState>  {
     if (jssStyles) {
       jssStyles.parentNode.removeChild(jssStyles);
     }
+
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.setState({ user });
+      } else {
+        this.setState({ user: null });
+        this.props.router.push('/login');
+      }
+    });
   }
 
   public render() {
-    const { Component, pageProps, classes } = this.props;
+    const { Component, pageProps, classes, router } = this.props;
+    const user = this.state.user;
+
+    if (!this.state.user) {
+      return null;
+    }
 
     return (
       <Container>
@@ -66,23 +60,38 @@ class PmmApp extends App<IPmmAppProps, IPmmAppState>  {
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <div className={classes.root}>
             <CssBaseline />
-            <nav className={classes.drawer}>
-              <Hidden smUp={true} implementation='js'>
-                <Navigator
-                  PaperProps={{ style: { width: drawerWidth } }}
-                  variant='temporary'
-                  open={this.state.mobileOpen}
-                  onClose={this.handleDrawerToggle}
-                />
-              </Hidden>
-              <Hidden xsDown={true} implementation='css'>
-                <Navigator PaperProps={{ style: { width: drawerWidth } }} />
-              </Hidden>
-            </nav>
+            {user && (
+              <nav className={classes.drawer}>
+                <Hidden smUp={true} implementation='js'>
+                  <Navigator
+                    PaperProps={{ style: { width: drawerWidth } }}
+                    route={router.route}
+                    variant='temporary'
+                    open={this.state.mobileOpen}
+                    onClose={this.handleDrawerToggle}
+                  />
+                </Hidden>
+                <Hidden xsDown={true} implementation='css'>
+                  <Navigator
+                    PaperProps={{ style: { width: drawerWidth } }}
+                    route={router.route}
+                  />
+                </Hidden>
+              </nav>
+            )}
             <div className={classes.appContent}>
-              <Header title='Messages' onDrawerToggle={this.handleDrawerToggle} />
+              {user && (
+                <Header
+                  title='Messages'
+                  onDrawerToggle={this.handleDrawerToggle}
+                  onLogout={this.handleLogout}
+                  user={user}
+                />
+              )}
               <main className={classes.mainContent}>
-                <Component {...pageProps} />
+                <AuthContext.Provider value={{ user }}>
+                  <Component {...pageProps} />
+                </AuthContext.Provider>
               </main>
             </div>
           </div>
@@ -92,8 +101,12 @@ class PmmApp extends App<IPmmAppProps, IPmmAppState>  {
   }
 
   private handleDrawerToggle = () => {
-    this.setState((state) => ({ mobileOpen: !this.state.mobileOpen }));
+    this.setState(state => ({ mobileOpen: !this.state.mobileOpen }));
+  };
+
+  private handleLogout() {
+    firebase.auth().signOut();
   }
 }
 
-export default withStyles(styles)(PmmApp);
+export default withRouter(withStyles(appStyles)(PmmApp));

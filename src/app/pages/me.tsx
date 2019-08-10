@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Box, Typography } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 import firebase from '../firebase';
 
 interface IFirebaseProps {
@@ -20,7 +20,7 @@ export default class Me extends Component<IFirebaseProps, IFirebaseState> {
   constructor(props) {
     super(props);
     this.state = {
-      messages: this.props.messages,
+      messages: this.props.messages
     };
   }
 
@@ -28,38 +28,46 @@ export default class Me extends Component<IFirebaseProps, IFirebaseState> {
     const db = firebase.firestore();
     // Disable deprecated features
     const unsubscribe = db.collection('messages').onSnapshot(
-      (querySnapshot) => {
+      querySnapshot => {
         const messages = {};
-        querySnapshot.forEach((doc) => {
+        querySnapshot.forEach(doc => {
           messages[doc.id] = doc.data();
         });
-        if (messages) { this.setState({ messages }); }
+        if (messages) {
+          this.setState({ messages });
+        }
       },
-      (error) => {
+      error => {
         // tslint:disable-next-line: no-console
         console.error(error);
-      },
+      }
     );
     this.setState({ unsubscribe });
+  }
+
+  public componentWillUnmount() {
+    if (this.state.unsubscribe) {
+      this.state.unsubscribe();
+    }
   }
 
   public render() {
     const { messages } = this.state;
 
     return (
-      <Container maxWidth='sm'>
+      <>
         <Box my={4}>
           <Typography variant='h4' component='h1' gutterBottom={true}>
-            Messages
+            My Messages
           </Typography>
         </Box>
         <ul>
           {messages &&
-            Object.keys(messages).map((key) => (
+            Object.keys(messages).map(key => (
               <li key={key}>{messages[key].text}</li>
             ))}
         </ul>
-      </Container>
+      </>
     );
   }
 }

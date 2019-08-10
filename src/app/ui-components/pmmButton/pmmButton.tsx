@@ -8,7 +8,7 @@ interface IPmmButtonProps {
   linkOpts?: LinkProps;
 }
 
-const getChild = (children) => {
+const getChild = children => {
   switch (typeof children) {
     case 'string':
       return <span>{children}</span>;
@@ -22,7 +22,7 @@ const getChild = (children) => {
 export default function PmmButton({
   children,
   buttonOpts,
-  linkOpts,
+  linkOpts
 }: IPmmButtonProps) {
   return (
     <Button {...buttonOpts}>
