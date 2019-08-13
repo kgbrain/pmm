@@ -1,7 +1,7 @@
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import 'isomorphic-unfetch';
+import { useState, useEffect } from 'react';
 
 const GoogleAuthProvider = firebase.auth.GoogleAuthProvider;
 
@@ -17,3 +17,32 @@ export default (!firebase.apps.length
   })
   : firebase.app());
 export { GoogleAuthProvider };
+
+export const useFirestoreQuery = (ref: firebase.firestore.CollectionReference) => {
+  const [docState, setDocState] = useState({
+    isLoading: true,
+    data: null
+  });
+  let unsubscribe;
+
+  useEffect(() => {
+    unsubscribe = ref.onSnapshot(docs => {
+      setDocState({
+        isLoading: false,
+        data: docs
+      });
+    });
+
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  }, []);
+
+  return docState;
+};
+
+export const setFirestoreQuery = (ref: firebase.firestore.CollectionReference, doc: string, data: object) => {
+  ref.doc(`${doc}`).set(data);
+}

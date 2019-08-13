@@ -1,103 +1,65 @@
-import React, { Component } from 'react';
-import { TextField, Box, Typography } from '@material-ui/core';
-import firebase from '../firebase';
+import React, { useContext, useState } from 'react';
+import { TextField, Box, Typography, LinearProgress } from '@material-ui/core';
+import firebase, { useFirestoreQuery, setFirestoreQuery } from '../firebase';
 import { AuthContext } from '../context';
 
-export default class Index extends Component {
-  public static contextType = AuthContext;
+export default function Index() {
+  const user = useContext(AuthContext);
+  const [value, setValue] = useState('');
 
-  public state = {
-    value: '',
-    messages: [],
-    unsubscribe: null
-  };
+  const { isLoading, data } = useFirestoreQuery(
+    firebase.firestore().collection('messages')
+  );
 
-  public componentDidMount() {
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        this.addDbListener();
-      } else {
-        this.removeDbListener();
-      }
-    });
+  function handleChange(event) {
+    setValue(event.target.value);
   }
 
-  public render() {
-    const { value, messages } = this.state;
-    const user = this.context && this.context.user;
-
-    return (
-      <>
-        <Box my={4}>
-          <Typography variant='h4' component='h1' gutterBottom={true}>
-            Add Messages
-          </Typography>
-        </Box>
-        {user && (
-          <div>
-            <form onSubmit={this.handleSubmit}>
-              <TextField
-                id='message'
-                label='Message'
-                onChange={this.handleChange}
-                placeholder={'Add Message...'}
-                value={value}
-              />
-            </form>
-            <ul>
-              {messages &&
-                Object.keys(messages).map(key => (
-                  <li key={key}>{messages[key].text}</li>
-                ))}
-            </ul>
-          </div>
-        )}
-      </>
-    );
-  }
-
-  private handleChange = event => {
-    this.setState({ value: event.target.value });
-  };
-
-  private handleSubmit = event => {
+  function handleSubmit(event) {
     event.preventDefault();
-    const db = firebase.firestore();
-    const date = new Date().getTime();
-    db.collection('messages')
-      .doc(`${date}`)
-      .set({
-        id: date,
-        text: this.state.value
-      });
-    this.setState({ value: '' });
-  };
+    const date = new Date().getTime().toString();
 
-  private addDbListener = () => {
-    const db = firebase.firestore();
-    // Disable deprecated features
-    const unsubscribe = db.collection('messages').onSnapshot(
-      querySnapshot => {
-        const messages = {};
-        querySnapshot.forEach(doc => {
-          messages[doc.id] = doc.data();
-        });
-        if (messages) {
-          this.setState({ messages });
-        }
-      },
-      error => {
-        // tslint:disable-next-line: no-console
-        console.error(error);
-      }
+    setFirestoreQuery(firebase.firestore().collection('messages'), date, {
+      id: date,
+      text: value
+    });
+    setValue('');
+  }
+
+  function dataToMessagesList(
+    querySnapshotData: firebase.firestore.QuerySnapshot
+  ) {
+    return (
+      <ul>
+        {querySnapshotData &&
+          querySnapshotData.docs
+            .map(el => el.data())
+            .map(message => <li key={message.id}>{message.text}</li>)}
+      </ul>
     );
-    this.setState({ unsubscribe });
-  };
+  }
 
-  private removeDbListener = () => {
-    // firebase.database().ref('messages').off()
-    if (this.state.unsubscribe) {
-      this.state.unsubscribe();
-    }
-  };
+  return (
+    <>
+      <Box my={4}>
+        <Typography variant='h4' component='h1' gutterBottom={true}>
+          Add Messages
+        </Typography>
+      </Box>
+      {user && (
+        <div>
+          <form onSubmit={handleSubmit}>
+            <TextField
+              id='message'
+              label='Message'
+              onChange={handleChange}
+              placeholder={'Add Message...'}
+              value={value}
+            />
+          </form>
+          {isLoading ? <LinearProgress /> : dataToMessagesList(data)}
+        </div>
+      )}
+    </>
+  );
 }

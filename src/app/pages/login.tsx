@@ -1,10 +1,10 @@
 import React from 'react';
-import { Button, Typography, Paper } from '@material-ui/core';
+import { Button, Typography, Paper, Container, Box } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import firebase, { GoogleAuthProvider } from '../firebase';
 import theme, { cardStyles } from '../ui-components/theme';
 
-export default function Login(props) {
+export default function Login() {
   const router = useRouter();
   const classes = cardStyles(theme);
 
@@ -23,22 +23,26 @@ export default function Login(props) {
 
   return (
     <>
-      <Paper className={classes.root}>
-        <Typography variant='h1' component='h3' align='center'>
-          Welcome
-        </Typography>
-        <Typography variant='h2' align='center'>
-          [<i>p</i>]mm
-        </Typography>
-        <Button
-          onClick={handleLogin}
-          size='large'
-          variant='contained'
-          color='primary'
-        >
-          Login with Google
-        </Button>
-      </Paper>
+      <Container maxWidth='sm'>
+        <Paper className={classes.root}>
+          <Typography variant='h3' component='h3' align='center'>
+            Welcome
+          </Typography>
+          <Typography variant='h4' align='center'>
+            [<i>p</i>]mm
+          </Typography>
+          <Box textAlign='center'>
+            <Button
+              onClick={handleLogin}
+              size='large'
+              variant='contained'
+              color='primary'
+            >
+              Login with Google
+            </Button>
+          </Box>
+        </Paper>
+      </Container>
     </>
   );
 }

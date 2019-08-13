@@ -22,8 +22,7 @@ interface IPmmAppState {
 class PmmApp extends App<IPmmAppProps, IPmmAppState> {
   public state = {
     mobileOpen: false,
-    user: null,
-    unsubscribe: null
+    user: null
   };
 
   public componentDidMount() {
@@ -46,10 +45,6 @@ class PmmApp extends App<IPmmAppProps, IPmmAppState> {
   public render() {
     const { Component, pageProps, classes, router } = this.props;
     const user = this.state.user;
-
-    if (!this.state.user) {
-      return null;
-    }
 
     return (
       <Container>
