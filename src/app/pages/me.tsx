@@ -1,73 +1,39 @@
-import React, { Component } from 'react';
-import { Box, Typography } from '@material-ui/core';
-import firebase from '../firebase';
+import React, { useContext, useState } from 'react';
+import { Box, Typography, LinearProgress } from '@material-ui/core';
+import firebase, { useFirestoreQuery } from '../firebase';
+import { AuthContext } from '../context';
 
-interface IFirebaseProps {
-  messages: object;
-}
+export default function Me() {
+  const user = useContext(AuthContext);
+  const [messages, setMessages] = useState('');
 
-interface IFirebaseState {
-  messages: object;
-  unsubscribe?: () => void;
-}
+  const { isLoading, data } = useFirestoreQuery(
+    firebase.firestore().collection('messages')
+  );
 
-export default class Me extends Component<IFirebaseProps, IFirebaseState> {
-  public static async getInitialProps({ req, query }) {
-    const messages = null;
-    return { messages };
-  }
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      messages: this.props.messages
-    };
-  }
-
-  public componentDidMount() {
-    const db = firebase.firestore();
-    // Disable deprecated features
-    const unsubscribe = db.collection('messages').onSnapshot(
-      querySnapshot => {
-        const messages = {};
-        querySnapshot.forEach(doc => {
-          messages[doc.id] = doc.data();
-        });
-        if (messages) {
-          this.setState({ messages });
-        }
-      },
-      error => {
-        // tslint:disable-next-line: no-console
-        console.error(error);
-      }
-    );
-    this.setState({ unsubscribe });
-  }
-
-  public componentWillUnmount() {
-    if (this.state.unsubscribe) {
-      this.state.unsubscribe();
-    }
-  }
-
-  public render() {
-    const { messages } = this.state;
-
+  function dataToMessagesList(
+    querySnapshotData: firebase.firestore.QuerySnapshot
+  ) {
     return (
-      <>
-        <Box my={4}>
-          <Typography variant='h4' component='h1' gutterBottom={true}>
-            My Messages
-          </Typography>
-        </Box>
-        <ul>
-          {messages &&
-            Object.keys(messages).map(key => (
-              <li key={key}>{messages[key].text}</li>
-            ))}
-        </ul>
-      </>
+      <ul>
+        {querySnapshotData &&
+          querySnapshotData.docs
+            .map(el => el.data())
+            .map(message => <li key={message.id}>{message.text}</li>)}
+      </ul>
     );
   }
+
+  return (
+    <>
+      <Box my={4}>
+        <Typography variant='h4' component='h1' gutterBottom={true}>
+          My Messages
+        </Typography>
+      </Box>
+      {user && (
+        <div>{isLoading ? <LinearProgress /> : dataToMessagesList(data)}</div>
+      )}
+    </>
+  );
 }

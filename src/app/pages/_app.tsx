@@ -17,6 +17,7 @@ interface IPmmAppProps {
 
 interface IPmmAppState {
   mobileOpen: boolean;
+  user: firebase.User;
 }
 
 class PmmApp extends App<IPmmAppProps, IPmmAppState> {

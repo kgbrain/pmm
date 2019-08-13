@@ -12,6 +12,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import { styles } from './header.css';
+import { Card, CardHeader, Button } from '@material-ui/core';
 
 interface IHeaderProps {
   title: string;
@@ -79,13 +80,32 @@ const Header = ({
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem
-                  onClick={() => {
-                    onLogout();
-                    handleClose();
-                  }}
-                >
-                  Logout
+                <MenuItem>
+                  <Card>
+                    <CardHeader
+                      avatar={
+                        <Avatar
+                          aria-label='avatar'
+                          src={user && user.photoURL}
+                          alt={user && user.displayName}
+                        />
+                      }
+                      title={user && user.displayName}
+                      subheader={user && user.email}
+                    />
+                  </Card>
+                </MenuItem>
+                <MenuItem>
+                  <Button
+                    variant='contained'
+                    fullWidth={true}
+                    onClick={() => {
+                      onLogout();
+                      handleClose();
+                    }}
+                  >
+                    Logout
+                  </Button>
                 </MenuItem>
               </Menu>
             </Grid>
