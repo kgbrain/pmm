@@ -143,7 +143,7 @@ export const appStyles = createStyles({
   },
   mainContent: {
     flex: 1,
-    padding: '48px 36px 0',
+    // padding: '48px 36px 0',
     background: '#eaeff1',
   },
 });

@@ -12,7 +12,15 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import { styles } from './header.css';
-import { Card, CardHeader, Button } from '@material-ui/core';
+import {
+  Card,
+  CardHeader,
+  Button,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText
+} from '@material-ui/core';
 
 interface IHeaderProps {
   title: string;
@@ -81,31 +89,33 @@ const Header = ({
                 onClose={handleClose}
               >
                 <MenuItem>
-                  <Card>
-                    <CardHeader
-                      avatar={
+                  <List>
+                    <ListItem alignItems='flex-start'>
+                      <ListItemAvatar>
                         <Avatar
                           aria-label='avatar'
                           src={user && user.photoURL}
                           alt={user && user.displayName}
                         />
-                      }
-                      title={user && user.displayName}
-                      subheader={user && user.email}
-                    />
-                  </Card>
-                </MenuItem>
-                <MenuItem>
-                  <Button
-                    variant='contained'
-                    fullWidth={true}
-                    onClick={() => {
-                      onLogout();
-                      handleClose();
-                    }}
-                  >
-                    Logout
-                  </Button>
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={user && user.displayName}
+                        secondary={user && user.email}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <Button
+                        fullWidth={true}
+                        variant='contained'
+                        onClick={() => {
+                          onLogout();
+                          handleClose();
+                        }}
+                      >
+                        Logout
+                      </Button>
+                    </ListItem>
+                  </List>
                 </MenuItem>
               </Menu>
             </Grid>

@@ -1,3 +1,5 @@
+import { RefForwardingComponent, ComponentType, ClassAttributes } from "react";
+
 function createRef<T>(): RefObject<T>;
 
 function forwardRef<T, P = {}>(

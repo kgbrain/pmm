@@ -7,9 +7,8 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import HomeIcon from '@material-ui/icons/Home';
-import MessageIcon from '@material-ui/icons/Message';
-import PersonIcon from '@material-ui/icons/Person';
+import AddBoxIcon from '@material-ui/icons/AddBox';
+import DashboardIcon from '@material-ui/icons/Dashboard';
 import { PaperProps } from '@material-ui/core/Paper';
 import { styles } from './navigator.css';
 import Link from 'next/link';
@@ -18,8 +17,8 @@ const categories = [
   {
     id: 'Develop',
     children: [
-      { id: 'Messages', icon: <MessageIcon />, path: '/' },
-      { id: 'Me', icon: <PersonIcon />, path: '/me' }
+      { id: 'Dashboard', icon: <DashboardIcon />, path: '/' }
+      // { id: 'Me', icon: <PersonIcon />, path: '/me' }
       // { id: 'Database', icon: <DnsRoundedIcon /> },
       // { id: 'Storage', icon: <PermMediaOutlinedIcon /> },
       // { id: 'Hosting', icon: <PublicIcon /> },
@@ -52,23 +51,36 @@ function Navigator(props: INavigatorProps) {
   return (
     <Drawer variant='permanent' {...other}>
       <List disablePadding={true}>
-        <ListItem
-          className={clsx(classes.firebase, classes.item, classes.itemCategory)}
-        >
-          [<i style={{ fontFamily: 'Georgia, sans-serif' }}>p</i>]MM
-        </ListItem>
-        <ListItem className={clsx(classes.item, classes.itemCategory)}>
-          <ListItemIcon className={classes.itemIcon}>
-            <HomeIcon />
-          </ListItemIcon>
-          <ListItemText
-            classes={{
-              primary: classes.itemPrimary
-            }}
+        <Link href='/'>
+          <ListItem
+            button={true}
+            className={clsx(
+              classes.firebase,
+              classes.item,
+              classes.itemCategory
+            )}
           >
-            Overview
-          </ListItemText>
-        </ListItem>
+            [<i style={{ fontFamily: 'Georgia, sans-serif' }}>p</i>]MM
+          </ListItem>
+        </Link>
+        <Link href='/pm/create'>
+          <ListItem
+            button={true}
+            onClick={onClose}
+            className={clsx(classes.item, classes.itemCategory)}
+          >
+            <ListItemIcon className={classes.itemIcon}>
+              <AddBoxIcon />
+            </ListItemIcon>
+            <ListItemText
+              classes={{
+                primary: classes.itemPrimary
+              }}
+            >
+              Post Mortem
+            </ListItemText>
+          </ListItem>
+        </Link>
         {categories.map(({ id, children }) => (
           <React.Fragment key={id}>
             <ListItem className={classes.categoryHeader}>

@@ -78,7 +78,7 @@ class PmmApp extends App<IPmmAppProps, IPmmAppState> {
             <div className={classes.appContent}>
               {user && (
                 <Header
-                  title='Messages'
+                  title='Post Mortems'
                   onDrawerToggle={this.handleDrawerToggle}
                   onLogout={this.handleLogout}
                   user={user}
