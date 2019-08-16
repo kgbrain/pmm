@@ -4,7 +4,7 @@ Post Mortem Management Application
 
 ## Prerequisites
 
-- Node 10
+- Node >=10.10
 - Npm 6
 
 ## Getting Started
@@ -13,10 +13,28 @@ Post Mortem Management Application
 - `npm i`
 - `npm run dev`
 
-## Run Firebase locally for testing
+## Run Full Powered Firebase App locally
+
+If you want to run the application together with lambda functions locally, follow the steps:
+
+1. Go to [https://console.firebase.google.com/u/0/project/pmm-tool/settings/serviceaccounts/adminsdk](https://console.firebase.google.com/u/0/project/pmm-tool/settings/serviceaccounts/adminsdk) and generate a new Firebase Admin SDK private key. Once generated it will be downloaded as JSON file. Please, put it in s safe directory and NEVER COMMIT IT!
+
+2. Provide authentication credentials to your application code by setting the environment variable **GOOGLE_APPLICATION_CREDENTIALS**:
+
+```bash
+export GOOGLE_APPLICATION_CREDENTIALS="[PATH_TO_PRIVATE_KEY_JSON]"
+```
+
+3. Run the App together with Firebase Emulator for functions:
 
 ```bash
 npm run serve
+```
+
+4. You also need to create a local tunnel for Webhooks. You need to open a new terminal window and run:
+
+```bash
+npx lt --port 5001
 ```
 
 ## Deploy
