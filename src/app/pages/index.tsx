@@ -1,5 +1,15 @@
 import React, { useContext, useState } from 'react';
-import { TextField, Box, Typography, LinearProgress } from '@material-ui/core';
+import {
+  TextField,
+  Box,
+  Typography,
+  LinearProgress,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon
+} from '@material-ui/core';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import firebase, { useFirestoreQuery, setFirestoreQuery } from '../firebase';
 import { AuthContext } from '../context';
 
@@ -8,57 +18,36 @@ export default function Index() {
   const [value, setValue] = useState('');
 
   const { isLoading, data } = useFirestoreQuery(
-    firebase.firestore().collection('messages')
+    firebase.firestore().collection('pm')
   );
-
-  function handleChange(event) {
-    setValue(event.target.value);
-  }
-
-  function handleSubmit(event) {
-    event.preventDefault();
-    const date = new Date().getTime().toString();
-
-    setFirestoreQuery(firebase.firestore().collection('messages'), date, {
-      id: date,
-      text: value
-    });
-    setValue('');
-  }
 
   function dataToMessagesList(
     querySnapshotData: firebase.firestore.QuerySnapshot
   ) {
     return (
-      <ul>
+      <List component='nav' aria-label='main mailbox folders'>
         {querySnapshotData &&
           querySnapshotData.docs
             .map(el => el.data())
-            .map(message => <li key={message.id}>{message.text}</li>)}
-      </ul>
+            .map(pm => (
+              <ListItem button={true} alignItems='flex-start' key={pm.id}>
+                <ListItemText
+                  primary={pm.title}
+                  secondary={new Date(pm.date.seconds).toLocaleString()}
+                />
+                <ListItemIcon style={{ maxWidth: 0 }}>
+                  <ChevronRightIcon />
+                </ListItemIcon>
+              </ListItem>
+            ))}
+      </List>
     );
   }
 
   return (
     <>
-      <Box my={4}>
-        <Typography variant='h4' component='h1' gutterBottom={true}>
-          Add Messages
-        </Typography>
-      </Box>
       {user && (
-        <div>
-          <form onSubmit={handleSubmit}>
-            <TextField
-              id='message'
-              label='Message'
-              onChange={handleChange}
-              placeholder={'Add Message...'}
-              value={value}
-            />
-          </form>
-          {isLoading ? <LinearProgress /> : dataToMessagesList(data)}
-        </div>
+        <div>{isLoading ? <LinearProgress /> : dataToMessagesList(data)}</div>
       )}
     </>
   );

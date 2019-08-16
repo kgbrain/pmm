@@ -19,11 +19,11 @@ export default (!firebase.apps.length
 export { GoogleAuthProvider };
 
 export const useFirestoreQuery = (ref: firebase.firestore.CollectionReference) => {
-  const [docState, setDocState] = useState({
+  const [docState, setDocState] = useState<{ isLoading: boolean, data: null | firebase.firestore.QuerySnapshot }>({
     isLoading: true,
     data: null
   });
-  let unsubscribe;
+  let unsubscribe: any;
 
   useEffect(() => {
     unsubscribe = ref.onSnapshot(docs => {
