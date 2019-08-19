@@ -1,12 +1,13 @@
 import React from 'react';
-import { Button, Typography, Paper, Container, Box } from '@material-ui/core';
+import { Button, Typography, Container, Box, Avatar, Link } from '@material-ui/core';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { useRouter } from 'next/router';
 import firebase, { GoogleAuthProvider } from '../firebase';
-import theme, { cardStyles } from '../ui-components/theme';
+import theme, { loginStyles } from '../ui-components/theme';
 
 export default function Login() {
   const router = useRouter();
-  const classes = cardStyles(theme);
+  const classes = loginStyles(theme);
 
   const handleLogin = () => {
     firebase
@@ -21,27 +22,45 @@ export default function Login() {
       });
   };
 
+  function Copyright() {
+    return (
+      <Typography variant='body2' color='textSecondary' align='center'>
+        {'Copyright © '}
+        <Link color='inherit' href='https://pmm-tool.web.app'>
+          Your Website
+        </Link>{' '}
+        {new Date().getFullYear()}
+        {'. Built with '}
+        <Link color='inherit' href='https://pmm-tool.web.app'>
+          [<i>p</i>]mm.
+        </Link>
+      </Typography>
+    );
+  }
+
   return (
     <>
-      <Container maxWidth='sm'>
-        <Paper className={classes.root}>
-          <Typography variant='h3' component='h3' align='center'>
-            Welcome
+      <Container component='main' maxWidth='sm'>
+        <div className={classes.root}>
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
+          <Typography variant='h5' component='h1' align='center'>
+            Sign in to [<i>p</i>]mm
           </Typography>
-          <Typography variant='h4' align='center'>
-            [<i>p</i>]mm
-          </Typography>
-          <Box textAlign='center'>
-            <Button
-              onClick={handleLogin}
-              size='large'
-              variant='contained'
-              color='primary'
-            >
-              Login with Google
-            </Button>
-          </Box>
-        </Paper>
+          <Button
+            className={classes.login}
+            onClick={handleLogin}
+            size='large'
+            variant='contained'
+            color='primary'
+          >
+            Login with Google
+          </Button>
+        </div>
+        <Box mt={8}>
+          <Copyright />
+        </Box>
       </Container>
     </>
   );

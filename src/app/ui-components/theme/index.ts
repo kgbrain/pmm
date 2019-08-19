@@ -116,10 +116,20 @@ theme = {
   },
 };
 
-export const cardStyles = makeStyles(() =>
+export const loginStyles = makeStyles(() =>
   createStyles({
     root: {
-      padding: theme.spacing(3, 2),
+      marginTop: theme.spacing(8),
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+    },
+    avatar: {
+      margin: theme.spacing(1),
+      backgroundColor: theme.palette.secondary.main,
+    },
+    login: {
+      margin: theme.spacing(3, 0, 2),
     },
   }),
 );
