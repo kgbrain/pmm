@@ -125,7 +125,7 @@ export const loginStyles = makeStyles(() =>
       alignItems: 'center',
     },
     avatar: {
-      margin: theme.spacing(1),
+      margin: theme.spacing(2),
       backgroundColor: theme.palette.secondary.main,
     },
     login: {

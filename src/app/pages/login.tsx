@@ -27,13 +27,10 @@ export default function Login() {
       <Typography variant='body2' color='textSecondary' align='center'>
         {'Copyright © '}
         <Link color='inherit' href='https://pmm-tool.web.app'>
-          Your Website
+          kgbrain
         </Link>{' '}
         {new Date().getFullYear()}
-        {'. Built with '}
-        <Link color='inherit' href='https://pmm-tool.web.app'>
-          [<i>p</i>]mm.
-        </Link>
+        {'.'}
       </Typography>
     );
   }
@@ -42,11 +39,11 @@ export default function Login() {
     <>
       <Container component='main' maxWidth='sm'>
         <div className={classes.root}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
           <Typography variant='h5' component='h1' align='center'>
-            Sign in to [<i>p</i>]mm
+            Welcome to [<i>p</i>]mm
           </Typography>
           <Button
             className={classes.login}
@@ -58,7 +55,7 @@ export default function Login() {
             Login with Google
           </Button>
         </div>
-        <Box mt={8}>
+        <Box mt={4}>
           <Copyright />
         </Box>
       </Container>
