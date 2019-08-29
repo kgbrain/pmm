@@ -43,6 +43,31 @@ export const useFirestoreQuery = (ref: firebase.firestore.CollectionReference) =
   return docState;
 };
 
+export const useQuery = (ref: firebase.firestore.CollectionReference, querySymbol: string, predicate: string[]) => {
+  const [docState, setDocState] = useState<{ isLoading: boolean, data: null | firebase.firestore.QuerySnapshot }>({
+    isLoading: true,
+    data: null
+  });
+  let unsubscribe: any;
+
+  useEffect(() => {
+    unsubscribe = ref[querySymbol](...predicate).onSnapshot(docs => {
+      setDocState({
+        isLoading: false,
+        data: docs
+      });
+    });
+
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  }, []);
+
+  return docState;
+};
+
 export const setFirestoreQuery = (ref: firebase.firestore.CollectionReference, doc: string, data: object) => {
   ref.doc(`${doc}`).set(data);
 }
